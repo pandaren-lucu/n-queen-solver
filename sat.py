@@ -19,13 +19,15 @@ def generate_sat(n):
     diagonals = [[] for i in range(n + n + 1)]
     for i in range(n):
         for j in range(n):
-            diagonals[i - j].append((n * i) + j + 1)
+            diagonals[i - j + n - 1].append((n * i) + j + 1)
     
     for diagonal in diagonals:
+        print(diagonal)
         if len(diagonal) > 1:
             for i in range(len(diagonal)):
-                for j in range(j + 1, len(diagonal)):
+                for j in range(i + 1, len(diagonal)):
                     clause = [-diagonal[i], -diagonal[j]]
+                    print(clause)
                     sat_clauses.append(clause)
 
     # Generate clauses for rule "Only one queen in a top-right to bottom-left diagonal"
@@ -37,7 +39,7 @@ def generate_sat(n):
     for diagonal in diagonals:
         if len(diagonal) > 1:
             for i in range(len(diagonal)):
-                for j in range(j + 1, len(diagonal)):
+                for j in range(i + 1, len(diagonal)):
                     clause = [-diagonal[i], -diagonal[j]]
                     sat_clauses.append(clause)
 
@@ -64,7 +66,7 @@ def write_sat_clauses_to_file(n, sat_clauses, file_path = None):
         file_path = os.path.join(file_path, "minisat.in")
     
     with open(file_path, "w+") as minisat_input_file:
-        minisat_input_file.write("p cnf {} {}\n".format(n, len(sat_clauses)))
+        minisat_input_file.write("p cnf {} {}\n".format(n * n, len(sat_clauses)))
         for clause in sat_clauses:
             string_clause = " ".join([str(var) for var in clause]) + " 0\n"
             minisat_input_file.write(string_clause)
