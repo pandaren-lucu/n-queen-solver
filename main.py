@@ -53,8 +53,10 @@ while event != sg.WIN_CLOSED:
 
             # Save all starting Queens
             while event != 'Solve':
+                if event == sg.WIN_CLOSED:
+                    break
                 start_queen.append(event)
-                window[event].update('Queen', button_color=('white', 'yellow'), disabled=True)
+                window[event].update('Queen', button_color=('white', 'orange'), disabled=True)
                 event, values = window.read()
 
             window.close()
@@ -101,7 +103,10 @@ while event != sg.WIN_CLOSED:
                 # Display N-Queen problem solution
                 for queen in solution[2]:
                     if queen > 0:
-                        window[queen].update('Queen', button_color=('white', 'yellow'))
+                        if queen in start_queen:
+                            window[queen].update('Queen', button_color=('white', 'orange'))
+                        else:
+                            window[queen].update('Queen', button_color=('white', 'yellow'))
                     elif board_dict[-queen][1] == 0:
                         window[-queen].update(board_dict[-queen][0], button_color=('white', 'black'))
                     else:
